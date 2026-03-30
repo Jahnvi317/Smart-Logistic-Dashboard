@@ -39,7 +39,9 @@ if option == "Logistics Delay Reasons Analysis":
      fig =px.imshow(temp_df,labels=dict(x="Logistics Delay Reason",y="Vehicle ID")
                           ,color_continuous_scale='Viridis',text_auto= True,aspect="auto")
      st.plotly_chart(fig)
-
+     st.markdown("""This heatmap identifies specific delay patterns by mapping Logistics Delay Reasons against Vehicle IDs.
+                  It highlights which assets are most frequently impacted by specific bottlenecks, 
+                 allowing for targeted operational improvements.""")
 
 #-----------------------------------------------------------------------------------------------------------
 #Demand vs Inventory gap
@@ -52,14 +54,15 @@ if option == "Top Assets with Inventory Shortage":
      fig2=px.bar(shortage_df,x='Asset_ID',y='Inventory_gap',text_auto='.0s')
      fig2.update_layout(xaxis_title=None,yaxis_visible=False,template='plotly_dark')
      st.plotly_chart(fig2)
-
+     st.write("A prioritized view of inventory gaps where demand exceeds current stock." \
+     " This chart identifies the specific Asset IDs requiring immediate replenishment to prevent fulfillment failures.")
 
 #-----------------------------------------------------------------------------------------------------------
 #Traffic & Delay Correlation
 if option == "Traffic Status vs Waiting Time Analysis":
      st.subheader("Traffic Status vs Waiting Time Analysis")
      st.plotly_chart(px.box(df,x='Traffic_Status',y='Waiting_Time'))
-
+     st.write("This distribution analysis visualizes how different traffic conditions impact vehicle waiting times. It helps in understanding the variance and outliers in delivery performance caused by external traffic factors.")
 #-----------------------------------------------------------------------------------------------------------
 #the Multi factor pivot
 if option == "Average Waiting Time by Traffic Status and Delay Reason":
@@ -68,7 +71,7 @@ if option == "Average Waiting Time by Traffic Status and Delay Reason":
      st.write(pivot_analysis)
      st.plotly_chart(px.imshow(pivot_analysis,text_auto=True,title="Avg Waiting Time Heatmap",labels=dict(x="Delay Reason",
                               y="Traffic Status",color="Avg Waiting Time"),color_continuous_scale='Cividis'))
-
+     st.write("A deep-dive into the combined impact of traffic and delay reasons on waiting times. This visualization pinpoint which specific combinations (e.g., Heavy Traffic + Documentation) cause the most significant delays.")
 #-----------------------------------------------------------------------------------------------------------
 #the stock risk analysis
 if option == "Assets at Stock Risk Analysis":
@@ -79,7 +82,8 @@ if option == "Assets at Stock Risk Analysis":
      at_risk=df[df['supply_demand_ratio']<1.0].sort_values('supply_demand_ratio')
      st.plotly_chart(px.bar(at_risk,x='Asset_ID',y='supply_demand_ratio',text_auto=True))
 
-
+     st.write("this analysis identifies assets at risk of stockouts by calculating the supply-demand ratio. Assets with a ratio below 1.0 are highlighted as 'At Risk', indicating that current inventory levels are insufficient to meet forecasted demand, necessitating urgent attention for replenishment.")
+#-----------------------------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------
 # customer value segmenting
 if option == "Customer Value Segmentation Analysis":
@@ -88,3 +92,5 @@ if option == "Customer Value Segmentation Analysis":
      fig3=px.scatter_3d(df,x='User_Purchase_Frequency',y='User_Transaction_Amount',z='Shipment_Status',size='User_Transaction_Amount',color='Shipment_Status')
      fig3.update_layout(scene=dict(xaxis_title='Purchase Frequency',yaxis_title='Transaction Amount',zaxis_title='Shipment Status'),template='plotly_dark')
      st.plotly_chart(fig3)
+
+     st.write("This 3D scatter plot segments customers based on their purchase frequency, transaction amount, and shipment status. It helps identify high-value customers and those with potential delivery issues, enabling targeted marketing and improved customer service strategies.")
